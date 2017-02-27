@@ -1,0 +1,42 @@
+{% load cache %}
+{% cache cachetime djacalendar month|date:'F Y' %}
+<div id="djcal">
+    {% include 'table.html' %}
+</div>
+{% endcache %}
+<script>
+function ACalendar(params, url, parent){
+
+    function getObjectFromXHR(url, callback){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                callback(xhr.response);
+            }
+        };
+        xhr.open('GET', url+'?'+params, true);
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send(null);
+    }
+    function handler(response){
+        var elem = document.getElementById(parent);
+        elem.innerHTML = response;
+    }
+
+    return getObjectFromXHR(url, handler);
+}
+function get_table(self){
+    var url = '{% url 'djangocalendar:table' %}';
+    var sign = self.getAttribute('data-sign');
+    var djdata = document.getElementById('djdate');
+    var date = djdata.getAttribute('data-d');
+    var model = djdata.getAttribute('data-m');
+    var lookup = djdata.getAttribute('data-lf');
+    var title = djdata.getAttribute('data-tf');
+    var slug = djdata.getAttribute('data-sf');
+    var params = 'sign='+ sign +'&date='+date+'&model='+model+'&lookup='+lookup+'&title='+title+'&slug='+slug;
+    console.log(params);
+    new ACalendar(params, url, 'djcal');
+}
+</script>

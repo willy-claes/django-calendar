@@ -1,0 +1,28 @@
+<table style="width: 100%; max-width: 100%; text-align: center;">
+    <tr>
+        <td><button onclick="get_table(this)" data-sign="-1" class="btn btn-primary btn-sm djbut">&lt;</button></td>
+        <td><h4 id="djdate" data-m="{{ model }}" data-lf="{{ lookup }}" data-tf="{{ tf }}" data-sf="{{ sf }}"
+                data-d="{{month|date:'Ymd'}}" class="text-center">{{ month|date:'F Y' }}</h4></td>
+        <td><button onclick="get_table(this)" data-sign="1" class="btn btn-primary btn-sm djbut">&gt;</button></td>
+    </tr>
+</table>
+<table class="table table-condensed text-center table-bordered">
+    <tr>
+        {% for i in weekdays %}
+        <td><b>{{ i|date:'D' }}</b></td>
+        {% endfor %}
+    </tr>
+    {% for week in mdays %}
+        <tr>
+            {% for day in week %}
+                <td>
+                    {% if day.1 %}
+                        {% include 'dropdown.html' %}
+                    {% else %}
+                        {{ day.0 }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
